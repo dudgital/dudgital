@@ -1,10 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import {
-  addModule,
-  collectInstalledDoctorChecks,
+  collectDoctorChecks,
   detectFramework,
+  planAddModule,
+  executeAddModule,
   runDoctorOnly,
+  readState,
 } from '@dudgital/engine'
 import { buildRegistry } from './registry.js'
 
@@ -12,6 +14,9 @@ const VERSION = '0.1.0'
 
 function printHelp(): void {
   console.log(`Dudgital CLI (dude / dg) v${VERSION}
+
+Dudgital is a project automation engine that plans and applies
+safe, repeatable changes to existing software projects.
 
 Usage:
   dg detect [--cwd <path>]
@@ -22,6 +27,8 @@ Usage:
   dg link [--project <id>]
   dg secrets pull [--cwd <path>]
   dg --help
+
+Spine: Command → Operation → plan() → Mutation[] → execute() → verify()
 
 Modules: auth, notify
 Providers: clerk, better-auth, resend
@@ -66,7 +73,7 @@ function detectConflicts(cwd: string, moduleId: string): string[] {
       const text = fs.readFileSync(mw, 'utf8')
       if (!text.includes('@dudgital/') && (text.includes('auth') || text.includes('clerk') || text.includes('NextAuth'))) {
         warnings.push(
-          'Existing middleware.ts looks auth-related. Dudgital will ensure its own middleware only if marker missing — review conflicts.',
+          'Existing middleware.ts looks auth-related. Review conflicts after apply.',
         )
       }
     }
@@ -118,12 +125,16 @@ export async function runCli(argv: string[]): Promise<number> {
         console.error(`doctor: no framework detected (${detect.reason})`)
         return 1
       }
-      const checks = collectInstalledDoctorChecks(reg, cwd, detect.framework)
+      const { checks, fromState, modules } = collectDoctorChecks(reg, cwd, detect.framework)
+      const state = readState(cwd)
+      if (fromState && state) {
+        console.log(`doctor: recorded modules — ${modules.join(', ') || '(none)'}`)
+      }
       if (!checks.length) {
         console.log('doctor: no Dudgital modules detected yet. Run: dg add auth')
         return 0
       }
-      const { ok, messages } = runDoctorOnly(reg, cwd, checks)
+      const { ok, messages } = runDoctorOnly(cwd, checks)
       for (const m of messages) console.log(`- ${m}`)
       console.log(ok ? 'doctor: ok' : 'doctor: failed')
       return ok ? 0 : 1
@@ -136,45 +147,49 @@ export async function runCli(argv: string[]): Promise<number> {
         return 1
       }
       const provider = flags.provider ? String(flags.provider) : undefined
-      if (!flags.yes && !flags.dryRun) {
-        // non-interactive default when --yes missing still proceeds (automation CLI)
-      }
       const warnings = detectConflicts(cwd, moduleId)
       for (const w of warnings) console.warn(`warning: ${w}`)
       if (cmd === 'update') {
         console.log(`Updating module "${moduleId}" (safe re-apply)…`)
       }
-      const result = await addModule(reg, moduleId, provider, {
+
+      const plan = await planAddModule(reg, moduleId, provider, {
         cwd,
         dryRun: Boolean(flags.dryRun),
         yes: Boolean(flags.yes),
       })
+
+      if (flags.dryRun) {
+        console.log(
+          `[dry-run] operation=${plan.operation} framework=${plan.project.framework} module=${plan.moduleId} provider=${plan.providerId}`,
+        )
+        console.log('Mutations:')
+        for (const m of plan.mutations) {
+          console.log(`  ${m.kind.padEnd(16)} ${m.id} — ${m.description}`)
+        }
+        if (plan.checks.length) {
+          console.log(`Verify checks: ${plan.checks.length}`)
+        }
+        return 0
+      }
+
+      const result = await executeAddModule(reg, plan, { cwd, yes: Boolean(flags.yes) })
       if (process.env.DUDGITAL_TELEMETRY === '1') {
         console.error(
-          `[telemetry] framework=${result.framework} module=${result.moduleId} provider=${result.providerId} success=${result.doctorOk && !flags.dryRun ? '1' : flags.dryRun ? 'dry-run' : '0'}`,
+          `[telemetry] framework=${plan.project.framework} module=${plan.moduleId} provider=${plan.providerId} success=${result.verifyOk ? '1' : '0'}`,
         )
       }
       console.log(
-        `${flags.dryRun ? '[dry-run] ' : ''}framework=${result.framework} module=${result.moduleId} provider=${result.providerId}`,
+        `framework=${plan.project.framework} module=${plan.moduleId} provider=${plan.providerId}`,
       )
-      for (const t of result.results) {
-        console.log(`  ${t.status.padEnd(8)} ${t.taskId}${t.detail ? ` — ${t.detail}` : ''}`)
+      for (const r of result.results) {
+        console.log(`  ${r.status.padEnd(8)} ${r.mutationId}${r.detail ? ` — ${r.detail}` : ''}`)
       }
-      if (!flags.dryRun && !result.doctorOk) {
-        console.error('doctor checks failed')
+      for (const m of result.verifyMessages) console.log(`  verify: ${m}`)
+      if (!result.verifyOk) {
+        console.error('verify failed')
         return 1
       }
-      ensureDudgitalDir(cwd)
-      fs.writeFileSync(
-        path.join(dudgitalDir(cwd), 'modules.json'),
-        JSON.stringify(
-          {
-            [result.moduleId]: { provider: result.providerId, updatedAt: new Date().toISOString() },
-          },
-          null,
-          2,
-        ) + '\n',
-      )
       return 0
     }
 
@@ -204,7 +219,6 @@ export async function runCli(argv: string[]): Promise<number> {
         JSON.stringify({ projectId, token: auth.token, linkedAt: new Date().toISOString() }, null, 2) +
           '\n',
       )
-      // Best-effort register with local dashboard
       try {
         await fetch(`${dashboardBase()}/api/projects`, {
           method: 'POST',
@@ -250,7 +264,9 @@ export async function runCli(argv: string[]): Promise<number> {
       if (additions.length) {
         fs.writeFileSync(envPath, `${existing.trimEnd()}${existing ? '\n' : ''}${additions.join('\n')}\n`)
       }
-      console.log(`Pulled ${Object.keys(secrets).length} secret(s); added ${additions.length} new key(s) to ${path.basename(envPath)}`)
+      console.log(
+        `Pulled ${Object.keys(secrets).length} secret(s); added ${additions.length} new key(s) to ${path.basename(envPath)}`,
+      )
       return 0
     }
 

@@ -2,14 +2,15 @@
 
 **Reading order**
 
-1. [00-constitution.md](./00-constitution.md) — mission and non-goals  
-2. [01-architecture.md](./01-architecture.md) — engine, modules, integrations, providers  
-3. [02-monorepo-layout.md](./02-monorepo-layout.md) — folders and npm packages  
-4. [03-cli-command-spec.md](./03-cli-command-spec.md) — `dude` / `dg` commands  
-5. [04-mvp-next-auth.md](./04-mvp-next-auth.md) — Next + Clerk MVP acceptance  
-6. [05-roadmap.md](./05-roadmap.md) — waves and gates  
-7. [06-copy-map.md](./06-copy-map.md) — what to copy from Lumiarq  
-8. [07-naming.md](./07-naming.md) — brand and package names  
-9. [08-publish.md](./08-publish.md) — npm publish notes for `@dudgital/dude`
+1. [00-constitution.md](./00-constitution.md) — one sentence + seven rules  
+2. [09-architecture-v0.md](./09-architecture-v0.md) — frozen spine  
+3. [01-architecture.md](./01-architecture.md) — short pointer  
+4. [02-monorepo-layout.md](./02-monorepo-layout.md) — folders and packages  
+5. [03-cli-command-spec.md](./03-cli-command-spec.md) — `dude` / `dg`  
+6. [04-mvp-next-auth.md](./04-mvp-next-auth.md) — Next + Clerk MVP  
+7. [05-roadmap.md](./05-roadmap.md) — waves  
+8. [06-copy-map.md](./06-copy-map.md) — Lumiarq copy map  
+9. [07-naming.md](./07-naming.md) — brand  
+10. [08-publish.md](./08-publish.md) — npm notes  
 
-Agents must read the constitution and agent contract before any Dudgital work.
+Agents must read the constitution and architecture v0 before any Dudgital work.

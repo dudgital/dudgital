@@ -1,25 +1,21 @@
 # Dudgital
 
-Developer Automation Platform — CLI `dude` / `dg`, engine, modules, framework integrations, providers.
+> **Dudgital is a project automation engine that plans and applies safe, repeatable changes to existing software projects.**
+
+CLI: `dude` / `dg` · Spine: `Command → Operation → plan() → Mutation[] → execute() → verify()`
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/](./docs/).
 
 ## Quick start
 
 ```bash
 pnpm install
 pnpm -r build
+DUDGITAL_SKIP_INSTALL=1 node cli/dist/bin.js add auth --provider clerk --dry-run --cwd fixtures/next-app-router
 DUDGITAL_SKIP_INSTALL=1 node cli/dist/bin.js add auth --provider clerk --yes --cwd fixtures/next-app-router
 node cli/dist/bin.js doctor --cwd fixtures/next-app-router
 ```
 
-## Docs
-
-See [docs/README.md](./docs/README.md).
-
 ## Publish
 
-```bash
-# after tests/typecheck green and npm org access:
-pnpm --filter @dudgital/dude publish --access public
-```
-
-Local dashboard: `pnpm --filter @dudgital/dashboard build && pnpm --filter @dudgital/dashboard start`
+See [docs/08-publish.md](./docs/08-publish.md). Local dashboard: `pnpm --filter @dudgital/dashboard build && pnpm --filter @dudgital/dashboard start`

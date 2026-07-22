@@ -10,31 +10,44 @@ export interface DetectResult {
   meta?: Record<string, string>
 }
 
-export type TaskKind =
-  | 'npmInstall'
-  | 'composerRequire'
-  | 'envMerge'
-  | 'writeFile'
-  | 'ensureFile'
-  | 'doctorCheck'
-  | 'print'
+/** Host application Dudgital mutates. */
+export interface Project {
+  cwd: string
+  framework: FrameworkId
+}
 
-export interface Task {
+/** Seven mutation kinds for v0 — add only when a second Operation needs it. */
+export type MutationKind =
+  | 'InstallPackage'
+  | 'WriteFile'
+  | 'UpdateFile'
+  | 'MergeEnv'
+  | 'RunCommand'
+  | 'DownloadSecret'
+  | 'DeleteFile'
+
+export type PackageManager = 'npm' | 'composer'
+
+export interface Mutation {
   id: string
-  kind: TaskKind
+  kind: MutationKind
   description: string
-  /** npm package names or composer packages */
+  /** InstallPackage */
+  packageManager?: PackageManager
   packages?: string[]
-  /** env key → placeholder value */
+  /** MergeEnv */
   env?: Record<string, string>
   envFile?: string
-  /** relative path from project root */
+  /** WriteFile / UpdateFile / DeleteFile */
   path?: string
   content?: string
-  /** skip write if file exists and contains marker */
+  /** skip write if file exists and contains marker (UpdateFile / ensure semantics) */
   marker?: string
-  /** doctor assertion */
-  check?: DoctorCheck
+  /** RunCommand */
+  command?: string
+  args?: string[]
+  /** DownloadSecret — key names to pull */
+  secretKeys?: string[]
 }
 
 export interface DoctorCheck {
@@ -43,6 +56,17 @@ export interface DoctorCheck {
   keys?: string[]
   packages?: string[]
   message?: string
+}
+
+/** Plan is Mutation[] plus operation context — not an IR. */
+export interface Plan {
+  operation: string
+  project: Project
+  moduleId?: string
+  providerId?: string
+  mutations: Mutation[]
+  checks: DoctorCheck[]
+  nextSteps?: string[]
 }
 
 export interface ModuleDefinition {
@@ -77,18 +101,55 @@ export interface RunOptions {
   yes?: boolean
 }
 
-export interface TaskResult {
-  taskId: string
+export interface MutationResult {
+  mutationId: string
   status: 'ok' | 'skipped' | 'failed' | 'dry-run'
   detail?: string
 }
 
+export interface OperationResult {
+  plan: Plan
+  results: MutationResult[]
+  verifyOk: boolean
+  verifyMessages: string[]
+}
+
+/** Recorded Dudgital state under .dudgital/state.json */
+export interface DudgitalState {
+  version: 1
+  framework?: FrameworkId
+  modules: Record<
+    string,
+    {
+      provider: string
+      updatedAt: string
+    }
+  >
+  updatedAt: string
+}
+
+export interface HistoryEntry {
+  timestamp: string
+  operation: string
+  moduleId?: string
+  providerId?: string
+  framework?: FrameworkId
+  dryRun: boolean
+  mutationIds: string[]
+  verifyOk?: boolean
+}
+
+/** @deprecated use Mutation */
+export type Task = Mutation
+/** @deprecated use MutationResult */
+export type TaskResult = MutationResult
+/** @deprecated use OperationResult */
 export interface PipelineResult {
   framework: FrameworkId
   moduleId: string
   providerId: string
-  tasks: Task[]
-  results: TaskResult[]
+  tasks: Mutation[]
+  results: Array<{ taskId: string; status: MutationResult['status']; detail?: string }>
   doctorOk: boolean
   doctorMessages: string[]
 }

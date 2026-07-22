@@ -2,7 +2,13 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { addModule, detectFramework } from '@dudgital/engine'
+import {
+  addModule,
+  detectFramework,
+  planAddModule,
+  readState,
+  runAddModule,
+} from '@dudgital/engine'
 import { buildRegistry } from '../cli/src/registry.ts'
 
 const tmpDirs: string[] = []
@@ -43,29 +49,52 @@ describe('detect', () => {
     const cwd = copyFixture('next-pages-router')
     const reg = buildRegistry()
     process.env.DUDGITAL_SKIP_INSTALL = '1'
-    await expect(
-      addModule(reg, 'auth', 'clerk', { cwd, yes: true }),
-    ).rejects.toThrow(/Pages Router/)
+    await expect(addModule(reg, 'auth', 'clerk', { cwd, yes: true })).rejects.toThrow(/Pages Router/)
+  })
+})
+
+describe('plan / Mutation[]', () => {
+  it('planAddModule produces mutations without writing files', async () => {
+    const cwd = copyFixture('next-app-router')
+    const reg = buildRegistry()
+    const plan = await planAddModule(reg, 'auth', 'clerk', { cwd, dryRun: true, yes: true })
+    expect(plan.operation).toBe('AddModule')
+    expect(plan.mutations.length).toBeGreaterThan(2)
+    expect(plan.mutations.every((m) => m.kind !== undefined)).toBe(true)
+    expect(fs.existsSync(path.join(cwd, 'middleware.ts'))).toBe(false)
+    expect(fs.existsSync(path.join(cwd, '.dudgital', 'state.json'))).toBe(false)
   })
 })
 
 describe('add auth clerk next', () => {
-  it('installs clerk pipeline idempotently', async () => {
+  it('installs clerk pipeline idempotently and records state', async () => {
     const cwd = copyFixture('next-app-router')
     const reg = buildRegistry()
     process.env.DUDGITAL_SKIP_INSTALL = '1'
 
-    const dry = await addModule(reg, 'auth', 'clerk', { cwd, dryRun: true, yes: true })
-    expect(dry.tasks.length).toBeGreaterThan(3)
-    expect(dry.results.every((r) => r.status === 'dry-run')).toBe(true)
-
-    const first = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
-    expect(first.doctorOk).toBe(true)
+    const first = await runAddModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(first.verifyOk).toBe(true)
     expect(fs.existsSync(path.join(cwd, 'middleware.ts'))).toBe(true)
     expect(fs.existsSync(path.join(cwd, '.env.local'))).toBe(true)
 
-    const second = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
-    expect(second.doctorOk).toBe(true)
+    const state = readState(cwd)
+    expect(state?.modules.auth?.provider).toBe('clerk')
+    expect(fs.existsSync(path.join(cwd, '.dudgital', 'history.json'))).toBe(true)
+
+    const second = await runAddModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(second.verifyOk).toBe(true)
+  })
+})
+
+describe('doctor from state', () => {
+  it('records modules so doctor can read state', async () => {
+    const cwd = copyFixture('next-app-router')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+    await runAddModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    const state = readState(cwd)
+    expect(state?.modules.auth).toBeTruthy()
+    expect(Object.keys(state!.modules)).toContain('auth')
   })
 })
 
@@ -74,8 +103,8 @@ describe('add auth better-auth', () => {
     const cwd = copyFixture('next-app-router')
     const reg = buildRegistry()
     process.env.DUDGITAL_SKIP_INSTALL = '1'
-    const result = await addModule(reg, 'auth', 'better-auth', { cwd, yes: true })
-    expect(result.doctorOk).toBe(true)
+    const result = await runAddModule(reg, 'auth', 'better-auth', { cwd, yes: true })
+    expect(result.verifyOk).toBe(true)
     expect(fs.existsSync(path.join(cwd, 'src/lib/auth.ts'))).toBe(true)
   })
 })
@@ -85,8 +114,8 @@ describe('add notify resend', () => {
     const cwd = copyFixture('next-app-router')
     const reg = buildRegistry()
     process.env.DUDGITAL_SKIP_INSTALL = '1'
-    const result = await addModule(reg, 'notify', 'resend', { cwd, yes: true })
-    expect(result.doctorOk).toBe(true)
+    const result = await runAddModule(reg, 'notify', 'resend', { cwd, yes: true })
+    expect(result.verifyOk).toBe(true)
     expect(fs.existsSync(path.join(cwd, 'src/lib/mail.ts'))).toBe(true)
   })
 })
@@ -96,8 +125,8 @@ describe('conflicts', () => {
     const cwd = copyFixture('next-existing-middleware')
     const reg = buildRegistry()
     process.env.DUDGITAL_SKIP_INSTALL = '1'
-    const result = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
-    expect(result.doctorOk).toBe(true)
+    const result = await runAddModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(result.verifyOk).toBe(true)
   })
 })
 
@@ -106,9 +135,9 @@ describe('laravel auth clerk', () => {
     const cwd = copyFixture('laravel-app')
     const reg = buildRegistry()
     process.env.DUDGITAL_SKIP_INSTALL = '1'
-    const result = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
-    expect(result.framework).toBe('laravel')
-    expect(result.doctorOk).toBe(true)
+    const result = await runAddModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(result.plan.project.framework).toBe('laravel')
+    expect(result.verifyOk).toBe(true)
     expect(fs.existsSync(path.join(cwd, 'app/Http/Middleware/ClerkAuthenticate.php'))).toBe(true)
   })
 })
