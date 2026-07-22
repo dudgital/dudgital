@@ -1,0 +1,32 @@
+{
+  "name": "@dudgital/dude",
+  "version": "0.1.0",
+  "description": "Dudgital CLI — developer automation (dude / dg)",
+  "type": "module",
+  "bin": {
+    "dude": "./dist/bin.js",
+    "dg": "./dist/bin.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@dudgital/engine": "workspace:*",
+    "@dudgital/framework-laravel": "workspace:*",
+    "@dudgital/framework-nextjs": "workspace:*",
+    "@dudgital/module-auth": "workspace:*",
+    "@dudgital/module-notify": "workspace:*",
+    "@dudgital/provider-better-auth": "workspace:*",
+    "@dudgital/provider-clerk": "workspace:*",
+    "@dudgital/provider-resend": "workspace:*",
+    "@dudgital/shared": "workspace:*"
+  }
+}

@@ -1,0 +1,114 @@
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { afterEach, describe, expect, it } from 'vitest'
+import { addModule, detectFramework } from '@dudgital/engine'
+import { buildRegistry } from '../cli/src/registry.ts'
+
+const tmpDirs: string[] = []
+
+function copyFixture(name: string): string {
+  const src = path.join(process.cwd(), 'fixtures', name)
+  const dest = fs.mkdtempSync(path.join(os.tmpdir(), `dudgital-${name}-`))
+  fs.cpSync(src, dest, { recursive: true })
+  tmpDirs.push(dest)
+  return dest
+}
+
+afterEach(() => {
+  for (const dir of tmpDirs.splice(0)) {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+describe('detect', () => {
+  it('detects next app router', async () => {
+    const cwd = copyFixture('next-app-router')
+    const reg = buildRegistry()
+    const result = await detectFramework(reg, cwd)
+    expect(result.detected).toBe(true)
+    expect(result.framework).toBe('nextjs')
+    expect(result.meta?.router).toMatch(/app|mixed/)
+  })
+
+  it('detects laravel', async () => {
+    const cwd = copyFixture('laravel-app')
+    const reg = buildRegistry()
+    const result = await detectFramework(reg, cwd)
+    expect(result.detected).toBe(true)
+    expect(result.framework).toBe('laravel')
+  })
+
+  it('rejects pages router on add auth', async () => {
+    const cwd = copyFixture('next-pages-router')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+    await expect(
+      addModule(reg, 'auth', 'clerk', { cwd, yes: true }),
+    ).rejects.toThrow(/Pages Router/)
+  })
+})
+
+describe('add auth clerk next', () => {
+  it('installs clerk pipeline idempotently', async () => {
+    const cwd = copyFixture('next-app-router')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+
+    const dry = await addModule(reg, 'auth', 'clerk', { cwd, dryRun: true, yes: true })
+    expect(dry.tasks.length).toBeGreaterThan(3)
+    expect(dry.results.every((r) => r.status === 'dry-run')).toBe(true)
+
+    const first = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(first.doctorOk).toBe(true)
+    expect(fs.existsSync(path.join(cwd, 'middleware.ts'))).toBe(true)
+    expect(fs.existsSync(path.join(cwd, '.env.local'))).toBe(true)
+
+    const second = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(second.doctorOk).toBe(true)
+  })
+})
+
+describe('add auth better-auth', () => {
+  it('wires better-auth on next', async () => {
+    const cwd = copyFixture('next-app-router')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+    const result = await addModule(reg, 'auth', 'better-auth', { cwd, yes: true })
+    expect(result.doctorOk).toBe(true)
+    expect(fs.existsSync(path.join(cwd, 'src/lib/auth.ts'))).toBe(true)
+  })
+})
+
+describe('add notify resend', () => {
+  it('wires resend on next', async () => {
+    const cwd = copyFixture('next-app-router')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+    const result = await addModule(reg, 'notify', 'resend', { cwd, yes: true })
+    expect(result.doctorOk).toBe(true)
+    expect(fs.existsSync(path.join(cwd, 'src/lib/mail.ts'))).toBe(true)
+  })
+})
+
+describe('conflicts', () => {
+  it('still completes clerk add when custom middleware exists', async () => {
+    const cwd = copyFixture('next-existing-middleware')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+    const result = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(result.doctorOk).toBe(true)
+  })
+})
+
+describe('laravel auth clerk', () => {
+  it('wires clerk middleware stub on laravel', async () => {
+    const cwd = copyFixture('laravel-app')
+    const reg = buildRegistry()
+    process.env.DUDGITAL_SKIP_INSTALL = '1'
+    const result = await addModule(reg, 'auth', 'clerk', { cwd, yes: true })
+    expect(result.framework).toBe('laravel')
+    expect(result.doctorOk).toBe(true)
+    expect(fs.existsSync(path.join(cwd, 'app/Http/Middleware/ClerkAuthenticate.php'))).toBe(true)
+  })
+})

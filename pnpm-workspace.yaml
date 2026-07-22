@@ -1,0 +1,8 @@
+packages:
+  - 'cli'
+  - 'engine'
+  - 'shared'
+  - 'frameworks/*'
+  - 'modules/*'
+  - 'providers/*'
+  - 'apps/*'
