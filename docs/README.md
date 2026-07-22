@@ -12,5 +12,8 @@
 8. [06-copy-map.md](./06-copy-map.md) — Lumiarq copy map  
 9. [07-naming.md](./07-naming.md) — brand  
 10. [08-publish.md](./08-publish.md) — npm notes  
+11. [tracking/BUILD_BACKLOG.md](./tracking/BUILD_BACKLOG.md) — Jira-style ticket board  
+
+Git workflow: [../CONTRIBUTING.md](../CONTRIBUTING.md)
 
 Agents must read the constitution and architecture v0 before any Dudgital work.

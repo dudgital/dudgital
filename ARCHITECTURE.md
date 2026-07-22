@@ -19,3 +19,8 @@ CLI → Command → Operation → plan() → Mutation[] → execute() → verify
 7. Optimize for developer time, not cleverness.
 
 Full text: [docs/00-constitution.md](./docs/00-constitution.md) · [docs/09-architecture-v0.md](./docs/09-architecture-v0.md)
+
+## Contributing
+
+Branch ladder (`main` ← `staging` ← `DUDG-XXX`): [CONTRIBUTING.md](./CONTRIBUTING.md)  
+Ticket tracking: [docs/tracking/BUILD_BACKLOG.md](./docs/tracking/BUILD_BACKLOG.md)
