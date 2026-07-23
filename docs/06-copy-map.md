@@ -6,7 +6,7 @@
 |-------|--------|-------------|
 | Next detect | `ecosystem/lumis/packs/nextjs/src/adapter.ts` | `frameworks/nextjs` |
 | Laravel detect | `ecosystem/lumis/packs/laravel` | `frameworks/laravel` |
-| Doctor / init UX ideas | `ecosystem/lumis/src/commands` | reimplement thin in `cli` + `engine` |
+| Doctor / init UX ideas | `ecosystem/lumis/src/commands` | reimplement thin in `cli` + Operations (`engine/` package) |
 | Env stub patterns | framework config-publish | provider env schemas |
 | Project / API-key UX | Traze Auth/Project | `apps/dashboard` (D0) |
 

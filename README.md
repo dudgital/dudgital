@@ -4,6 +4,8 @@
 
 CLI: `dude` / `dg` · Spine: `Command → Operation → plan() → Mutation[] → execute() → verify()`
 
+Users install **`@dudgital/dude`**. The `engine/` package is an implementation detail (Operations), not a separate product.
+
 See [ARCHITECTURE.md](./ARCHITECTURE.md) and [docs/](./docs/).
 
 ## Quick start
