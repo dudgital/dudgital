@@ -56,7 +56,18 @@ Dry-runs that only call `plan()` do **not** append history (CLI dry-run stops af
 
 ## `auth.json` / `link.json`
 
-Dashboard session stubs for `dg secrets pull`. Not the source of truth for installed modules — that is `state.json`.
+Dashboard session stubs used by CLI for `dg login` / `dg link`. Not the source of truth for installed modules — that is `state.json`.
+
+## Secrets pull (`SyncSecrets`)
+
+`dg secrets pull` is a real Operation (`planSyncSecrets` → `executeSyncSecrets`), not a CLI-only env write:
+
+1. `plan()` → `DownloadSecret` + `MergeEnv` mutations
+2. CLI supplies `fetchSecrets` (HTTP to dashboard using `link.json`)
+3. Operation fills both mutations’ `env`, then `execute()` / `verify()`
+4. Successful runs append `history.json` (`operation: "SyncSecrets"`)
+
+Dry-run (`--dry-run`) stops after plan and does not fetch or write.
 
 ## Doctor behavior
 

@@ -15,11 +15,11 @@
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
 | **Done** | 5 | through `DUDG-004` |
-| **In Progress** | 0 | — |
-| **Backlog** | 4 | Layout + DX later |
+| **In Progress** | 1 | `DUDG-009` |
+| **Backlog** | 3 | Layout later + fixture matrix |
 | **Total tracked** | 9 | |
 
-**Open PRs → `staging`:** _(update when opened)_
+**Open PRs → `staging`:** `DUDG-009` (this branch)
 
 ---
 
@@ -57,11 +57,11 @@
 | DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Backlog | — |
 | DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | Backlog | — |
 | DUDG-008 | Fixture matrix + Pages Router rejection regression in CI | 3 | Backlog | — |
-| DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation | 5 | Backlog | — |
+| DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation | 5 | In Progress | `DUDG-009` |
 
 ### Suggested order
 
-`DUDG-001` → `DUDG-002` → `DUDG-007` → `DUDG-003` → `DUDG-004` → **`DUDG-008`** → `DUDG-008` → `DUDG-005`/`DUDG-006` (when earned) → `DUDG-009`.
+`DUDG-001` → `DUDG-002` → `DUDG-007` → `DUDG-003` → `DUDG-004` → **`DUDG-008`** + **`DUDG-009`** (independent) → `DUDG-005`/`DUDG-006` (when earned).
 
 ---
 
