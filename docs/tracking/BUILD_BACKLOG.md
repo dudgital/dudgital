@@ -10,13 +10,13 @@
 
 > Gradual correction: folder layout and deeper architecture evolve **ticket by ticket**. Do not rewrite the monorepo in one PR.
 
-### Progress snapshot (updated 2026-07-22)
+### Progress snapshot (updated 2026-07-23)
 
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
-| **Done** | 1 | `DUDG-001` merged to `staging` |
-| **In Progress** | 1 | `DUDG-002` |
-| **Backlog** | 7 | Gradual architecture / folder / DX tickets |
+| **Done** | 2 | `DUDG-001`, `DUDG-002` |
+| **In Progress** | 1 | `DUDG-007` (CI/CD onset) |
+| **Backlog** | 6 | Docs + layout + later DX |
 | **Total tracked** | 9 | |
 
 **Open PRs → `staging`:** _(update when opened)_
@@ -24,8 +24,6 @@
 ---
 
 ## Foundation (pre-backlog, on main)
-
-Landed before staging ladder: greenfield CLI, v0 `plan → Mutation[] → execute → verify`, constitution.
 
 | ID | Summary | Status | Branch |
 |----|---------|--------|--------|
@@ -38,27 +36,32 @@ Landed before staging ladder: greenfield CLI, v0 `plan → Mutation[] → execut
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
 | DUDG-001 | Staging ladder, CONTRIBUTING, BUILD_BACKLOG, PR template | 3 | Done | `DUDG-001` (#1) |
+| DUDG-002 | Document catalog vs Operation layout; layout evolution map | 3 | Done | `DUDG-002` (#2) |
 
 ---
 
-## Sprint A0 — Gradual architecture & layout (do next)
-
-One ticket at a time. Prefer docs + thin code moves over big-bang renames.
+## Sprint C0 — CI/CD from onset
 
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
-| DUDG-002 | Document catalog vs Operation layout; add `docs/10-layout-evolution.md` target map | 3 | In Progress | `DUDG-002` |
-| DUDG-003 | Rename public story away from “engine” in CLI help/docs only (package name can stay) | 2 | Backlog | — |
+| DUDG-007 | PR CI + SemVer release→main workflows (BeyondSQM-style, slim) | 5 | In Progress | `DUDG-007` |
+
+---
+
+## Sprint A0 — Gradual architecture & layout
+
+| ID | Summary | Pts | Status | Branch |
+|----|---------|-----|--------|--------|
+| DUDG-003 | Demote “engine” in public CLI/docs copy only (package name can stay) | 2 | Backlog | — |
 | DUDG-004 | Coalesce `.dudgital/` schema docs (`state`, `history`, `auth`, `link`) | 2 | Backlog | — |
 | DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Backlog | — |
 | DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | Backlog | — |
-| DUDG-007 | Add minimal PR CI (typecheck + test) on Ready-for-review → staging | 5 | Backlog | — |
 | DUDG-008 | Fixture matrix + Pages Router rejection regression in CI | 3 | Backlog | — |
-| DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation (no new kinds unless needed) | 5 | Backlog | — |
+| DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation | 5 | Backlog | — |
 
 ### Suggested order
 
-`DUDG-001` → `DUDG-002` → `DUDG-004` → `DUDG-007` → `DUDG-003` → `DUDG-008` → `DUDG-005`/`DUDG-006` (only when duplication earns it) → `DUDG-009`.
+`DUDG-001` → `DUDG-002` → **`DUDG-007`** → `DUDG-003` → `DUDG-004` → `DUDG-008` → `DUDG-005`/`DUDG-006` (when earned) → `DUDG-009`.
 
 ---
 
