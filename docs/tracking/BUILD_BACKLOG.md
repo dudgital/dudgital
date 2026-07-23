@@ -14,9 +14,9 @@
 
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
-| **Done** | 2 | `DUDG-001`, `DUDG-002` |
-| **In Progress** | 1 | `DUDG-007` (CI/CD onset) |
-| **Backlog** | 6 | Docs + layout + later DX |
+| **Done** | 3 | through `DUDG-007` |
+| **In Progress** | 1 | `DUDG-003` |
+| **Backlog** | 5 | Docs + layout + later DX |
 | **Total tracked** | 9 | |
 
 **Open PRs → `staging`:** _(update when opened)_
@@ -44,7 +44,7 @@
 
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
-| DUDG-007 | PR CI + SemVer release→main workflows (BeyondSQM-style, slim) | 5 | In Progress | `DUDG-007` |
+| DUDG-007 | PR CI + SemVer release→main workflows (BeyondSQM-style, slim) | 5 | Done | `DUDG-007` (#3) |
 
 ---
 
@@ -52,7 +52,7 @@
 
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
-| DUDG-003 | Demote “engine” in public CLI/docs copy only (package name can stay) | 2 | Backlog | — |
+| DUDG-003 | Demote “engine” in public CLI/docs copy only (package name can stay) | 2 | In Progress | `DUDG-003` |
 | DUDG-004 | Coalesce `.dudgital/` schema docs (`state`, `history`, `auth`, `link`) | 2 | Backlog | — |
 | DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Backlog | — |
 | DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | Backlog | — |
