@@ -46,6 +46,8 @@ Folders `modules/`, `providers/`, `frameworks/` are **catalogs / adapters**. The
   link.json       # linked project (D0)
 ```
 
+Full schema: [11-dudgital-state.md](./11-dudgital-state.md).
+
 `doctor` prefers `state.json`; heuristics only if state is empty.
 
 See also [00-constitution.md](./00-constitution.md), root [ARCHITECTURE.md](../ARCHITECTURE.md), and [10-layout-evolution.md](./10-layout-evolution.md) for gradual folder moves.
