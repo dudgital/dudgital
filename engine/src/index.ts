@@ -25,7 +25,18 @@ export {
   planMutationsFromProvider,
 } from './operations/add-module.js'
 
-export { planSyncSecrets, executeSyncSecrets, type SyncSecretsOptions } from './operations/sync-secrets.js'
+export {
+  planSyncSecrets,
+  executeSyncSecrets,
+  type SyncSecretsOptions,
+  type SyncSecretsResult,
+} from './operations/sync-secrets.js'
+
+export {
+  executePlan,
+  type ExecutePlanOptions,
+  type ExecutePlanContext,
+} from './operations/run-operation.js'
 
 export { collectDoctorChecks, collectInstalledDoctorChecks } from './operations/doctor.js'
 

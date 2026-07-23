@@ -1,10 +1,13 @@
-import type { FrameworkId, Plan, RunOptions, Mutation } from '@dudgital/shared'
+import type { FrameworkId, Mutation, OperationResult, Plan, RunOptions } from '@dudgital/shared'
 import { detectFramework, type Registry } from '../registry.js'
-import { executeMutations, verifyPlan } from '../execute.js'
-import { appendHistory } from '../state.js'
+import { executePlan } from './run-operation.js'
 
 export type SyncSecretsOptions = RunOptions & {
   fetchSecrets?: () => Promise<Record<string, string>>
+}
+
+export type SyncSecretsResult = OperationResult & {
+  secretCount: number
 }
 
 function envFileFor(framework: FrameworkId): string {
@@ -45,13 +48,7 @@ export async function executeSyncSecrets(
   reg: Registry,
   plan: Plan,
   options: SyncSecretsOptions,
-): Promise<{
-  plan: Plan
-  results: Awaited<ReturnType<typeof executeMutations>>
-  verifyOk: boolean
-  verifyMessages: string[]
-  secretCount: number
-}> {
+): Promise<SyncSecretsResult> {
   const dryRun = Boolean(options.dryRun)
   let secrets: Record<string, string> = {}
   let working = plan
@@ -93,29 +90,6 @@ export async function executeSyncSecrets(
     }
   }
 
-  const results = executeMutations(reg, working.project.framework, working.mutations, options.cwd, dryRun)
-
-  let verifyOk = true
-  let verifyMessages: string[] = []
-  if (!dryRun) {
-    const verified = verifyPlan(options.cwd, working)
-    verifyOk = verified.ok && !results.some((r) => r.status === 'failed')
-    verifyMessages = verified.messages
-    appendHistory(options.cwd, {
-      timestamp: new Date().toISOString(),
-      operation: working.operation,
-      framework: working.project.framework,
-      dryRun: false,
-      mutationIds: working.mutations.map((m) => m.id),
-      verifyOk,
-    })
-  }
-
-  return {
-    plan: working,
-    results,
-    verifyOk: dryRun ? true : verifyOk,
-    verifyMessages,
-    secretCount: Object.keys(secrets).length,
-  }
+  const result = executePlan(reg, working, options)
+  return { ...result, secretCount: Object.keys(secrets).length }
 }
