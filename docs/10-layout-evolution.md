@@ -45,11 +45,11 @@ tests/
 | Document this map | **DUDG-002** | Now |
 | Docs-only “engine” demotion in UX copy | DUDG-003 | After 007 |
 | `.dudgital/` schema doc | DUDG-004 | After 003 |
-| Shared Operation runner | DUDG-005 | When Doctor + AddModule share ≥2 duplicated helpers |
-| Physical `operations/` + `catalogs/` folders | DUDG-006 | After 005 or clear contributor confusion |
-| PR CI + SemVer release→main | **DUDG-007** | Now (onset) |
-| Fixture CI matrix | DUDG-008 | After 007 |
-| DownloadSecret via dashboard Operation | DUDG-009 | Product need |
+| Shared Operation runner (`executePlan`) | **DUDG-005** | Earned: AddModule + SyncSecrets duplicate execute/verify/history |
+| Physical `operations/` + `catalogs/` folders | DUDG-006 | After 005 |
+| PR CI + SemVer release→main | **DUDG-007** | Done |
+| Fixture CI matrix | **DUDG-008** | Done |
+| DownloadSecret via dashboard Operation | **DUDG-009** | Done |
 
 ## Rules
 

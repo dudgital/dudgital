@@ -8,8 +8,8 @@ import type {
   RunOptions,
 } from '@dudgital/shared'
 import { detectFramework, type Registry } from '../registry.js'
-import { executeMutations, verifyPlan } from '../execute.js'
-import { appendHistory, recordModuleInstall } from '../state.js'
+import { recordModuleInstall } from '../state.js'
+import { executePlan } from './run-operation.js'
 
 export function planMutationsFromProvider(
   module: ModuleDefinition,
@@ -117,36 +117,17 @@ export async function executeAddModule(
   plan: Plan,
   options: RunOptions,
 ): Promise<OperationResult> {
-  const dryRun = Boolean(options.dryRun)
-  const results = executeMutations(reg, plan.project.framework, plan.mutations, options.cwd, dryRun)
-
-  let verifyOk = true
-  let verifyMessages: string[] = []
-  if (!dryRun) {
-    const verified = verifyPlan(options.cwd, plan)
-    verifyOk = verified.ok && !results.some((r) => r.status === 'failed')
-    verifyMessages = verified.messages
-
-    if (verifyOk && plan.moduleId && plan.providerId) {
-      recordModuleInstall(options.cwd, plan.project.framework, plan.moduleId, plan.providerId)
-    }
-    appendHistory(options.cwd, {
-      timestamp: new Date().toISOString(),
-      operation: plan.operation,
-      moduleId: plan.moduleId,
-      providerId: plan.providerId,
-      framework: plan.project.framework,
-      dryRun: false,
-      mutationIds: plan.mutations.map((m) => m.id),
-      verifyOk,
-    })
-
-    if (plan.nextSteps?.length) {
-      console.log(`\nNext steps:\n${plan.nextSteps.map((s) => `  • ${s}`).join('\n')}\n`)
-    }
-  }
-
-  return { plan, results, verifyOk: dryRun ? true : verifyOk, verifyMessages }
+  return executePlan(reg, plan, {
+    ...options,
+    beforeHistory: ({ cwd, plan: p, verifyOk }) => {
+      if (verifyOk && p.moduleId && p.providerId) {
+        recordModuleInstall(cwd, p.project.framework, p.moduleId, p.providerId)
+      }
+      if (p.nextSteps?.length) {
+        console.log(`\nNext steps:\n${p.nextSteps.map((s) => `  • ${s}`).join('\n')}\n`)
+      }
+    },
+  })
 }
 
 /** Full Operation: plan → execute → verify (+ state). */
