@@ -35,15 +35,32 @@ jobs:
       - name: Test
         run: pnpm test
 
+  fixture-matrix:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Build
+        run: pnpm build
+
+      - name: Fixture matrix + Pages Router regression
+        run: pnpm test:matrix
+
   ci-success:
     if: ${{ !github.event.pull_request.draft && always() }}
-    needs: [quality]
+    needs: [quality, fixture-matrix]
     runs-on: ubuntu-latest
     steps:
-      - name: Require green quality
+      - name: Require green quality + fixture-matrix
         run: |
-          if [ "${{ needs.quality.result }}" != "success" ]; then
-            echo "::error::PR CI failed (quality=${{ needs.quality.result }})"
+          if [ "${{ needs.quality.result }}" != "success" ] || \
+             [ "${{ needs.fixture-matrix.result }}" != "success" ]; then
+            echo "::error::PR CI failed (quality=${{ needs.quality.result }}, fixture-matrix=${{ needs.fixture-matrix.result }})"
             exit 1
           fi
           echo "PR CI green."
