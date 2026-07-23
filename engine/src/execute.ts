@@ -224,11 +224,25 @@ export function executeMutations(
           })
         }
       } else if (m.kind === 'DownloadSecret') {
-        results.push({
-          mutationId: m.id,
-          status: dryRun ? 'dry-run' : 'skipped',
-          detail: 'use dg secrets pull',
-        })
+        if (dryRun) {
+          results.push({
+            mutationId: m.id,
+            status: 'dry-run',
+            detail: m.secretKeys?.length ? m.secretKeys.join(', ') : 'would download secrets',
+          })
+        } else if (m.env !== undefined) {
+          results.push({
+            mutationId: m.id,
+            status: 'ok',
+            detail: `${Object.keys(m.env).length} secret(s)`,
+          })
+        } else {
+          results.push({
+            mutationId: m.id,
+            status: 'failed',
+            detail: 'no secrets provided — Operation must fetch before execute',
+          })
+        }
       }
     } catch (err) {
       results.push({

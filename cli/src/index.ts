@@ -5,6 +5,8 @@ import {
   detectFramework,
   planAddModule,
   executeAddModule,
+  planSyncSecrets,
+  executeSyncSecrets,
   runDoctorOnly,
   readState,
 } from '@dudgital/engine'
@@ -25,7 +27,7 @@ Usage:
   dg update <module> [--provider <id>] [--yes] [--dry-run] [--cwd <path>]
   dg login
   dg link [--project <id>]
-  dg secrets pull [--cwd <path>]
+  dg secrets pull [--dry-run] [--cwd <path>]
   dg --help
 
 Spine: Command → Operation → plan() → Mutation[] → execute() → verify()
@@ -238,35 +240,39 @@ export async function runCli(argv: string[]): Promise<number> {
         console.error('Project not linked. Run: dg login && dg link')
         return 1
       }
-      let secrets: Record<string, string> = {}
-      try {
-        const res = await fetch(`${dashboardBase()}/api/projects/${link.projectId}/secrets`, {
-          headers: { authorization: `Bearer ${link.token}` },
-        })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        secrets = (await res.json()) as Record<string, string>
-      } catch (err) {
-        console.error(`Failed to pull secrets: ${err instanceof Error ? err.message : err}`)
+
+      const plan = await planSyncSecrets(reg, { cwd, dryRun: Boolean(flags.dryRun) })
+      if (flags.dryRun) {
+        console.log(
+          `[dry-run] operation=${plan.operation} framework=${plan.project.framework}`,
+        )
+        console.log('Mutations:')
+        for (const m of plan.mutations) {
+          console.log(`  ${m.kind.padEnd(16)} ${m.id} — ${m.description}`)
+        }
+        return 0
+      }
+
+      const result = await executeSyncSecrets(reg, plan, {
+        cwd,
+        fetchSecrets: async () => {
+          const res = await fetch(`${dashboardBase()}/api/projects/${link.projectId}/secrets`, {
+            headers: { authorization: `Bearer ${link.token}` },
+          })
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          return (await res.json()) as Record<string, string>
+        },
+      })
+
+      for (const r of result.results) {
+        console.log(`  ${r.status.padEnd(8)} ${r.mutationId}${r.detail ? ` — ${r.detail}` : ''}`)
+      }
+      for (const m of result.verifyMessages) console.log(`  verify: ${m}`)
+      if (!result.verifyOk) {
+        console.error('verify failed')
         return 1
       }
-      const envPath = path.join(cwd, fs.existsSync(path.join(cwd, 'artisan')) ? '.env' : '.env.local')
-      const existing = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : ''
-      const keys = new Set(
-        existing
-          .split(/\r?\n/)
-          .map((l) => l.match(/^([A-Za-z_][A-Za-z0-9_]*)=/)?.[1])
-          .filter((k): k is string => Boolean(k)),
-      )
-      const additions: string[] = []
-      for (const [k, v] of Object.entries(secrets)) {
-        if (!keys.has(k)) additions.push(`${k}=${v}`)
-      }
-      if (additions.length) {
-        fs.writeFileSync(envPath, `${existing.trimEnd()}${existing ? '\n' : ''}${additions.join('\n')}\n`)
-      }
-      console.log(
-        `Pulled ${Object.keys(secrets).length} secret(s); added ${additions.length} new key(s) to ${path.basename(envPath)}`,
-      )
+      console.log(`Pulled ${result.secretCount} secret(s) via SyncSecrets Operation`)
       return 0
     }
 
