@@ -14,6 +14,7 @@
 10. [08-publish.md](./08-publish.md) — npm notes  
 11. [tracking/BUILD_BACKLOG.md](./tracking/BUILD_BACKLOG.md) — Jira-style ticket board  
 12. [10-layout-evolution.md](./10-layout-evolution.md) — gradual folder target map  
+13. [11-dudgital-state.md](./11-dudgital-state.md) — `.dudgital/` state schema  
 
 Git workflow: [../CONTRIBUTING.md](../CONTRIBUTING.md)
 
