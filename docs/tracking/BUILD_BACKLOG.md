@@ -14,12 +14,12 @@
 
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
-| **Done** | 0 | v0 spine landed on `main` pre-tracking; counted as foundation below |
-| **In Progress** | 1 | `DUDG-001` |
-| **Backlog** | 8 | Gradual architecture / folder / DX tickets |
+| **Done** | 1 | `DUDG-001` merged to `staging` |
+| **In Progress** | 1 | `DUDG-002` |
+| **Backlog** | 7 | Gradual architecture / folder / DX tickets |
 | **Total tracked** | 9 | |
 
-**Open PRs → `staging`:** _(none yet)_
+**Open PRs → `staging`:** _(update when opened)_
 
 ---
 
@@ -37,7 +37,7 @@ Landed before staging ladder: greenfield CLI, v0 `plan → Mutation[] → execut
 
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
-| DUDG-001 | Staging ladder, CONTRIBUTING, BUILD_BACKLOG, PR template | 3 | In Progress | `DUDG-001` |
+| DUDG-001 | Staging ladder, CONTRIBUTING, BUILD_BACKLOG, PR template | 3 | Done | `DUDG-001` (#1) |
 
 ---
 
@@ -47,7 +47,7 @@ One ticket at a time. Prefer docs + thin code moves over big-bang renames.
 
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
-| DUDG-002 | Document catalog vs Operation layout; add `docs/10-layout-evolution.md` target map | 3 | Backlog | — |
+| DUDG-002 | Document catalog vs Operation layout; add `docs/10-layout-evolution.md` target map | 3 | In Progress | `DUDG-002` |
 | DUDG-003 | Rename public story away from “engine” in CLI help/docs only (package name can stay) | 2 | Backlog | — |
 | DUDG-004 | Coalesce `.dudgital/` schema docs (`state`, `history`, `auth`, `link`) | 2 | Backlog | — |
 | DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Backlog | — |

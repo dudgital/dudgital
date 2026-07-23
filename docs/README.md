@@ -13,6 +13,7 @@
 9. [07-naming.md](./07-naming.md) — brand  
 10. [08-publish.md](./08-publish.md) — npm notes  
 11. [tracking/BUILD_BACKLOG.md](./tracking/BUILD_BACKLOG.md) — Jira-style ticket board  
+12. [10-layout-evolution.md](./10-layout-evolution.md) — gradual folder target map  
 
 Git workflow: [../CONTRIBUTING.md](../CONTRIBUTING.md)
 
