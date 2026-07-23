@@ -14,8 +14,8 @@
 
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
-| **Done** | 4 | through `DUDG-003` |
-| **In Progress** | 1 | `DUDG-004` |
+| **Done** | 5 | through `DUDG-004` |
+| **In Progress** | 0 | — |
 | **Backlog** | 4 | Layout + DX later |
 | **Total tracked** | 9 | |
 
@@ -53,7 +53,7 @@
 | ID | Summary | Pts | Status | Branch |
 |----|---------|-----|--------|--------|
 | DUDG-003 | Demote “engine” in public CLI/docs copy only (package name can stay) | 2 | Done | `DUDG-003` (#4) |
-| DUDG-004 | Coalesce `.dudgital/` schema docs (`state`, `history`, `auth`, `link`) | 2 | In Progress | `DUDG-004` |
+| DUDG-004 | Coalesce `.dudgital/` schema docs (`state`, `history`, `auth`, `link`) | 2 | Done | `DUDG-004` (#5/#6) |
 | DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Backlog | — |
 | DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | Backlog | — |
 | DUDG-008 | Fixture matrix + Pages Router rejection regression in CI | 3 | Backlog | — |
@@ -61,7 +61,7 @@
 
 ### Suggested order
 
-`DUDG-001` → `DUDG-002` → `DUDG-007` → `DUDG-003` → **`DUDG-004`** → `DUDG-008` → `DUDG-005`/`DUDG-006` (when earned) → `DUDG-009`.
+`DUDG-001` → `DUDG-002` → `DUDG-007` → `DUDG-003` → `DUDG-004` → **`DUDG-008`** → `DUDG-008` → `DUDG-005`/`DUDG-006` (when earned) → `DUDG-009`.
 
 ---
 
