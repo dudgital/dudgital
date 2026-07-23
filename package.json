@@ -7,6 +7,7 @@
     "build": "pnpm -r run build",
     "typecheck": "pnpm -r run typecheck",
     "test": "vitest run",
+    "test:matrix": "pnpm test && node scripts/fixture-matrix.mjs",
     "dg": "node cli/dist/bin.js",
     "dude": "node cli/dist/bin.js"
   },

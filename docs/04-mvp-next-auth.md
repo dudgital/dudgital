@@ -25,7 +25,7 @@ and ends with a working Clerk wiring path plus `dg doctor` exit 0 — without be
 - [ ] Works on fresh `create-next-app` (App Router)  
 - [ ] `--dry-run` prints tasks without writes  
 - [ ] Idempotent re-run does not corrupt the project  
-- [ ] Pages Router projects rejected with a clear message  
+- [x] Pages Router projects rejected with a clear message  
 - [ ] `dg doctor` exit 0 after successful add  
 
 ## Out of scope for MVP
