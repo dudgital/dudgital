@@ -25,6 +25,8 @@ export {
   planMutationsFromProvider,
 } from './operations/add-module.js'
 
+export { planSyncSecrets, executeSyncSecrets, type SyncSecretsOptions } from './operations/sync-secrets.js'
+
 export { collectDoctorChecks, collectInstalledDoctorChecks } from './operations/doctor.js'
 
 import type { OperationResult, PipelineResult, RunOptions } from '@dudgital/shared'

@@ -19,7 +19,9 @@
 | **Backlog** | 3 | Layout later + secrets Operation |
 | **Total tracked** | 9 | |
 
-**Open PRs → `staging`:** `DUDG-008` (this branch)
+| **In Progress** | 1 | `DUDG-009` |
+| **Backlog** | 3 | Layout later + fixture matrix |
+| **Total tracked** | 9 | |
 
 ---
 
@@ -57,7 +59,7 @@
 | DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Backlog | — |
 | DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | Backlog | — |
 | DUDG-008 | Fixture matrix + Pages Router rejection regression in CI | 3 | In Progress | `DUDG-008` |
-| DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation | 5 | Backlog | — |
+| DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation | 5 | In Progress | `DUDG-009` |
 
 ### Suggested order
 
