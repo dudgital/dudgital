@@ -14,7 +14,7 @@
 
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
-| **Done** | 4 | through `DUDG-007`, `DUDG-003` |
+| **Done** | 4 | through `DUDG-003` |
 | **In Progress** | 1 | `DUDG-004` |
 | **Backlog** | 4 | Layout + DX later |
 | **Total tracked** | 9 | |
