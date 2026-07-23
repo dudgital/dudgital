@@ -20,13 +20,14 @@ DUDG-___  ·  Base branch: `staging`
 
 ## Tests
 
-- [ ] `pnpm -r build`
+- [ ] GitHub Actions `ci-success` green (Ready for review)
+- [ ] `pnpm build`
 - [ ] `pnpm test`
-- [ ] `pnpm -r typecheck`
+- [ ] `pnpm typecheck`
 
 ## Checklist
 
 - [ ] Branch name = ticket ID, cut from local `staging`
-- [ ] PR was a **draft** while WIP; marked **Ready for review** when ready
+- [ ] PR was a **draft** while WIP; marked **Ready for review** to trigger PR CI
 - [ ] `docs/tracking/BUILD_BACKLOG.md` Status/Branch updated
 - [ ] Canonical docs updated if behavior changed

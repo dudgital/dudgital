@@ -1,0 +1,93 @@
+name: Release → Production
+
+# Cut from origin/staging: release/vMAJOR.MINOR.PATCH (optional -rc.N / -beta.N).
+# Quality + build, then promote to main (= production line) and tag.
+on:
+  push:
+    branches:
+      - 'release/v[0-9]+.[0-9]+.[0-9]+'
+      - 'release/v[0-9]+.[0-9]+.[0-9]+-*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: SemVer label for manual runs (e.g. v0.1.0)
+        required: true
+        type: string
+
+concurrency:
+  group: release-production-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DUDGITAL_SKIP_INSTALL: '1'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.semver.outputs.version }}
+    steps:
+      - name: Validate SemVer release branch
+        id: semver
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            BRANCH="${GITHUB_REF#refs/heads/}"
+            VERSION="${BRANCH#release/}"
+          fi
+          if ! echo "$VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'; then
+            echo "::error::Version '$VERSION' is not valid SemVer (expected vX.Y.Z or vX.Y.Z-prerelease)"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Release version: $VERSION"
+
+  quality:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+  promote:
+    needs: [validate, quality]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fast-forward main and tag
+        env:
+          VERSION: ${{ needs.validate.outputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main staging || true
+          git checkout -B main
+          git reset --hard "${GITHUB_SHA}"
+          git push origin main
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists — skipping create"
+          else
+            git tag -a "$VERSION" -m "Release $VERSION"
+            git push origin "$VERSION"
+          fi
+          echo "Promoted main @ ${GITHUB_SHA} and tag $VERSION"

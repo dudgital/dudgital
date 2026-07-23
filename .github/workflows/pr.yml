@@ -1,0 +1,49 @@
+name: PR CI
+
+# Ticket / hotfix PRs into staging (or main).
+# Draft PRs never consume minutes — CI starts on "Ready for review"
+# and re-runs on subsequent pushes via synchronize.
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+    branches: [staging, main]
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  DUDGITAL_SKIP_INSTALL: '1'
+
+jobs:
+  quality:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+  ci-success:
+    if: ${{ !github.event.pull_request.draft && always() }}
+    needs: [quality]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require green quality
+        run: |
+          if [ "${{ needs.quality.result }}" != "success" ]; then
+            echo "::error::PR CI failed (quality=${{ needs.quality.result }})"
+            exit 1
+          fi
+          echo "PR CI green."
