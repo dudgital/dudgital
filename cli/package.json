@@ -9,24 +9,32 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "files": ["dist"],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "prepublishOnly": "pnpm run build"
+    "pack:check": "node ../scripts/check-publishable.mjs",
+    "prepublishOnly": "pnpm run build && pnpm run pack:check"
   },
-  "dependencies": {
-    "@dudgital/operations": "workspace:*",
+  "devDependencies": {
     "@dudgital/framework-laravel": "workspace:*",
     "@dudgital/framework-nextjs": "workspace:*",
     "@dudgital/module-auth": "workspace:*",
     "@dudgital/module-notify": "workspace:*",
+    "@dudgital/operations": "workspace:*",
     "@dudgital/provider-better-auth": "workspace:*",
     "@dudgital/provider-clerk": "workspace:*",
     "@dudgital/provider-resend": "workspace:*",
-    "@dudgital/shared": "workspace:*"
+    "@dudgital/shared": "workspace:*",
+    "tsup": "^8.5.1"
   }
 }
