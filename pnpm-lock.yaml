@@ -24,89 +24,89 @@ importers:
         specifier: workspace:*
         version: link:../../shared
 
+  catalogs/frameworks/laravel:
+    dependencies:
+      '@dudgital/operations':
+        specifier: workspace:*
+        version: link:../../../operations
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
+  catalogs/frameworks/nextjs:
+    dependencies:
+      '@dudgital/operations':
+        specifier: workspace:*
+        version: link:../../../operations
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
+  catalogs/modules/auth:
+    dependencies:
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
+  catalogs/modules/notify:
+    dependencies:
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
+  catalogs/providers/better-auth:
+    dependencies:
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
+  catalogs/providers/clerk:
+    dependencies:
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
+  catalogs/providers/resend:
+    dependencies:
+      '@dudgital/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+
   cli:
     dependencies:
-      '@dudgital/engine':
-        specifier: workspace:*
-        version: link:../engine
       '@dudgital/framework-laravel':
         specifier: workspace:*
-        version: link:../frameworks/laravel
+        version: link:../catalogs/frameworks/laravel
       '@dudgital/framework-nextjs':
         specifier: workspace:*
-        version: link:../frameworks/nextjs
+        version: link:../catalogs/frameworks/nextjs
       '@dudgital/module-auth':
         specifier: workspace:*
-        version: link:../modules/auth
+        version: link:../catalogs/modules/auth
       '@dudgital/module-notify':
         specifier: workspace:*
-        version: link:../modules/notify
+        version: link:../catalogs/modules/notify
+      '@dudgital/operations':
+        specifier: workspace:*
+        version: link:../operations
       '@dudgital/provider-better-auth':
         specifier: workspace:*
-        version: link:../providers/better-auth
+        version: link:../catalogs/providers/better-auth
       '@dudgital/provider-clerk':
         specifier: workspace:*
-        version: link:../providers/clerk
+        version: link:../catalogs/providers/clerk
       '@dudgital/provider-resend':
         specifier: workspace:*
-        version: link:../providers/resend
+        version: link:../catalogs/providers/resend
       '@dudgital/shared':
         specifier: workspace:*
         version: link:../shared
 
-  engine:
+  operations:
     dependencies:
       '@dudgital/shared':
         specifier: workspace:*
         version: link:../shared
-
-  frameworks/laravel:
-    dependencies:
-      '@dudgital/engine':
-        specifier: workspace:*
-        version: link:../../engine
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
-
-  frameworks/nextjs:
-    dependencies:
-      '@dudgital/engine':
-        specifier: workspace:*
-        version: link:../../engine
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
-
-  modules/auth:
-    dependencies:
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
-
-  modules/notify:
-    dependencies:
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
-
-  providers/better-auth:
-    dependencies:
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
-
-  providers/clerk:
-    dependencies:
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
-
-  providers/resend:
-    dependencies:
-      '@dudgital/shared':
-        specifier: workspace:*
-        version: link:../../shared
 
   shared: {}
 

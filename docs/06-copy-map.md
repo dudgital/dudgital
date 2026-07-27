@@ -4,9 +4,9 @@
 
 | Asset | Source | Destination |
 |-------|--------|-------------|
-| Next detect | `ecosystem/lumis/packs/nextjs/src/adapter.ts` | `frameworks/nextjs` |
-| Laravel detect | `ecosystem/lumis/packs/laravel` | `frameworks/laravel` |
-| Doctor / init UX ideas | `ecosystem/lumis/src/commands` | reimplement thin in `cli` + Operations (`engine/` package) |
+| Next detect | `ecosystem/lumis/packs/nextjs/src/adapter.ts` | `catalogs/frameworks/nextjs` |
+| Laravel detect | `ecosystem/lumis/packs/laravel` | `catalogs/frameworks/laravel` |
+| Doctor / init UX ideas | `ecosystem/lumis/src/commands` | reimplement thin in `cli` + Operations (`operations/` package) |
 | Env stub patterns | framework config-publish | provider env schemas |
 | Project / API-key UX | Traze Auth/Project | `apps/dashboard` (D0) |
 

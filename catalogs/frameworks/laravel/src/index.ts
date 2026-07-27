@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import type { FrameworkIntegration } from '@dudgital/engine'
+import type { FrameworkIntegration } from '@dudgital/operations'
 import type { DetectResult } from '@dudgital/shared'
 
 export function detectLaravel(projectRoot: string): DetectResult {

@@ -9,7 +9,7 @@ import {
   executeSyncSecrets,
   runDoctorOnly,
   readState,
-} from '@dudgital/engine'
+} from '@dudgital/operations'
 import { buildRegistry } from './registry.js'
 
 const VERSION = '0.1.0'

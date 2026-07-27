@@ -4,7 +4,7 @@ import {
   registerModule,
   registerProvider,
   type Registry,
-} from '@dudgital/engine'
+} from '@dudgital/operations'
 import { nextjsIntegration } from '@dudgital/framework-nextjs'
 import { laravelIntegration } from '@dudgital/framework-laravel'
 import { authModule } from '@dudgital/module-auth'

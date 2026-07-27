@@ -2,10 +2,10 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { planSyncSecrets, executeSyncSecrets, createRegistry } from '@dudgital/engine'
+import { planSyncSecrets, executeSyncSecrets, createRegistry } from '@dudgital/operations'
 import { nextjsIntegration } from '@dudgital/framework-nextjs'
 import { laravelIntegration } from '@dudgital/framework-laravel'
-import { registerFramework } from '@dudgital/engine'
+import { registerFramework } from '@dudgital/operations'
 
 const tmpDirs: string[] = []
 

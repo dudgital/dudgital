@@ -16,7 +16,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@dudgital/engine": "workspace:*",
+    "@dudgital/operations": "workspace:*",
     "@dudgital/shared": "workspace:*"
   }
 }

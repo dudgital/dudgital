@@ -1,5 +1,5 @@
 {
-  "name": "@dudgital/engine",
+  "name": "@dudgital/framework-laravel",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,6 +16,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@dudgital/operations": "workspace:*",
     "@dudgital/shared": "workspace:*"
   }
 }

@@ -6,7 +6,7 @@
 CLI → Command → Operation → plan() → Mutation[] → execute() → verify()
 ```
 
-There is no “Engine” in the product story. `@dudgital/engine` is an implementation package name only.
+There is no “Engine” in the product story. Operations live in `@dudgital/operations`.
 
 ## Domain nouns (six only)
 
@@ -27,7 +27,7 @@ Add a kind only when a second real Operation needs it (constitution rule 2).
 
 ## Catalogs vs architecture
 
-Folders `modules/`, `providers/`, `frameworks/` are **catalogs / adapters**. They feed `plan()`. They are not the public architecture.
+Folders `catalogs/modules/`, `catalogs/providers/`, `catalogs/frameworks/` are **catalogs / adapters**. They feed `plan()`. They are not the public architecture.
 
 ## Explicitly not in v0
 

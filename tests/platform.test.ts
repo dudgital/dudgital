@@ -8,7 +8,7 @@ import {
   planAddModule,
   readState,
   runAddModule,
-} from '@dudgital/engine'
+} from '@dudgital/operations'
 import { buildRegistry } from '../cli/src/registry.ts'
 
 const tmpDirs: string[] = []
