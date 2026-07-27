@@ -1,8 +1,8 @@
 packages:
   - 'cli'
-  - 'engine'
+  - 'operations'
   - 'shared'
-  - 'frameworks/*'
-  - 'modules/*'
-  - 'providers/*'
+  - 'catalogs/frameworks/*'
+  - 'catalogs/modules/*'
+  - 'catalogs/providers/*'
   - 'apps/*'

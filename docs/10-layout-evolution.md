@@ -1,20 +1,22 @@
 # Layout evolution (gradual)
 
-This is the **target map**, not a big-bang rename. Move folders only via `DUDG-*` tickets when a move removes real confusion or duplication.
+This is the **target map**. Moves land only via `DUDG-*` tickets when they remove real confusion or duplication.
 
-## Current layout (v0 — keep working)
+## Current layout (after DUDG-006)
 
 ```text
-cli/              Command surface (dude/dg)
-engine/           Implementation of Operations (name is internal)
-shared/           Domain types: Plan, Mutation, State, …
-modules/          Module catalog
-providers/        Provider catalog
-frameworks/       Framework catalog (detect + conventions)
-apps/dashboard/   Control plane
-docs/             Constitution + tracking
-fixtures/         Host-app fixtures
-tests/            Integration tests
+cli/                    # Command surface (dude/dg)
+operations/             # @dudgital/operations — Operations implementation
+shared/                 # Domain types: Plan, Mutation, State, …
+catalogs/
+  modules/              # Module catalog
+  providers/            # Provider catalog
+  frameworks/           # Framework catalog (detect + conventions)
+apps/dashboard/         # Control plane
+docs/                   # Constitution + tracking
+fixtures/               # Host-app fixtures
+tests/                  # Integration tests
+scripts/                # CI helpers (fixture matrix, …)
 ```
 
 Public spine (unchanged by folder names):
@@ -23,30 +25,15 @@ Public spine (unchanged by folder names):
 CLI → Command → Operation → plan() → Mutation[] → execute() → verify()
 ```
 
-## Target layout (earn each move)
+## Ticket map
 
-```text
-cli/                    # stays
-packages/ or top-level:
-  shared/               # types
-  operations/           # AddModule, Doctor, SyncSecrets (today: engine/src/operations)
-  catalogs/
-    modules/
-    providers/
-    frameworks/
-apps/dashboard/
-docs/
-fixtures/
-tests/
-```
-
-| Move | Ticket | When earned |
-|------|--------|-------------|
-| Document this map | **DUDG-002** | Now |
-| Docs-only “engine” demotion in UX copy | DUDG-003 | After 007 |
-| `.dudgital/` schema doc | DUDG-004 | After 003 |
-| Shared Operation runner (`executePlan`) | **DUDG-005** | Earned: AddModule + SyncSecrets duplicate execute/verify/history |
-| Physical `operations/` + `catalogs/` folders | DUDG-006 | After 005 |
+| Move | Ticket | Status |
+|------|--------|--------|
+| Document this map | **DUDG-002** | Done |
+| Docs-only “engine” demotion in UX copy | **DUDG-003** | Done |
+| `.dudgital/` schema doc | **DUDG-004** | Done |
+| Shared Operation runner (`executePlan`) | **DUDG-005** | Done |
+| Physical `operations/` + `catalogs/` folders | **DUDG-006** | In Progress |
 | PR CI + SemVer release→main | **DUDG-007** | Done |
 | Fixture CI matrix | **DUDG-008** | Done |
 | DownloadSecret via dashboard Operation | **DUDG-009** | Done |

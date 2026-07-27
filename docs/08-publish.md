@@ -11,7 +11,7 @@
 ```bash
 cd ecosystem/dudgital
 pnpm --filter @dudgital/shared build
-pnpm --filter @dudgital/engine build
+pnpm --filter @dudgital/operations build
 # build remaining workspace deps then:
 pnpm --filter @dudgital/dude publish --access public
 ```

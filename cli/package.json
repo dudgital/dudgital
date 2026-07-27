@@ -19,7 +19,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@dudgital/engine": "workspace:*",
+    "@dudgital/operations": "workspace:*",
     "@dudgital/framework-laravel": "workspace:*",
     "@dudgital/framework-nextjs": "workspace:*",
     "@dudgital/module-auth": "workspace:*",

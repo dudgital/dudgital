@@ -10,16 +10,16 @@
 
 > Gradual correction: folder layout and deeper architecture evolve **ticket by ticket**. Do not rewrite the monorepo in one PR.
 
-### Progress snapshot (updated 2026-07-23)
+### Progress snapshot (updated 2026-07-27)
 
 | Bucket | Tickets | Notes |
 |--------|---------|--------|
-| **Done** | 7 | through `DUDG-009` (incl. 008) |
-| **In Progress** | 1 | `DUDG-005` |
-| **Backlog** | 1 | `DUDG-006` layout move |
+| **Done** | 8 | through `DUDG-005` |
+| **In Progress** | 1 | `DUDG-006` layout move |
+| **Backlog** | 0 | Sprint A0 complete after 006 |
 | **Total tracked** | 9 | |
 
-**Open PRs → `staging`:** `DUDG-005` (this branch)
+**Open PRs → `staging`:** `DUDG-006` (this branch)
 
 ---
 
@@ -54,14 +54,14 @@
 |----|---------|-----|--------|--------|
 | DUDG-003 | Demote “engine” in public CLI/docs copy only (package name can stay) | 2 | Done | `DUDG-003` (#4) |
 | DUDG-004 | Coalesce `.dudgital/` schema docs (`state`, `history`, `auth`, `link`) | 2 | Done | `DUDG-004` (#5/#6) |
-| DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | In Progress | `DUDG-005` |
-| DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | Backlog | — |
+| DUDG-005 | Extract shared Operation runner helpers only if Doctor + AddModule duplicate ≥2× | 5 | Done | `DUDG-005` (#10) |
+| DUDG-006 | Align monorepo folders toward `operations/` package surface (thin move, keep catalogs) | 8 | In Progress | `DUDG-006` |
 | DUDG-008 | Fixture matrix + Pages Router rejection regression in CI | 3 | Done | `DUDG-008` (#9) |
 | DUDG-009 | Dashboard secrets Operation uses DownloadSecret mutation | 5 | Done | `DUDG-009` (#8) |
 
 ### Suggested order
 
-`DUDG-001` → `DUDG-002` → `DUDG-007` → `DUDG-003` → `DUDG-004` → `DUDG-008` + `DUDG-009` → **`DUDG-005`** → **`DUDG-006`**.
+`DUDG-001` → `DUDG-002` → `DUDG-007` → `DUDG-003` → `DUDG-004` → `DUDG-008` + `DUDG-009` → `DUDG-005` → **`DUDG-006`**.
 
 ---
 
