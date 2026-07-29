@@ -35,6 +35,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Publishability (CLI pack)
+        run: pnpm pack:check
+
   fixture-matrix:
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest

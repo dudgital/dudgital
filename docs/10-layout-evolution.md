@@ -33,7 +33,7 @@ CLI → Command → Operation → plan() → Mutation[] → execute() → verify
 | Docs-only “engine” demotion in UX copy | **DUDG-003** | Done |
 | `.dudgital/` schema doc | **DUDG-004** | Done |
 | Shared Operation runner (`executePlan`) | **DUDG-005** | Done |
-| Physical `operations/` + `catalogs/` folders | **DUDG-006** | In Progress |
+| Physical `operations/` + `catalogs/` folders | **DUDG-006** | Done |
 | PR CI + SemVer release→main | **DUDG-007** | Done |
 | Fixture CI matrix | **DUDG-008** | Done |
 | DownloadSecret via dashboard Operation | **DUDG-009** | Done |

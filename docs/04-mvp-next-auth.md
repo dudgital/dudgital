@@ -22,12 +22,12 @@ and ends with a working Clerk wiring path plus `dg doctor` exit 0 — without be
 
 ## Acceptance gates
 
-- [ ] Works on fresh `create-next-app` (App Router)  
-- [ ] `--dry-run` prints tasks without writes  
-- [ ] Idempotent re-run does not corrupt the project  
-- [x] Pages Router projects rejected with a clear message  
-- [ ] `dg doctor` exit 0 after successful add  
+- [x] Works on fixture App Router sample (`fixtures/next-app-router`; fresh `create-next-app` smoke tracked as DUDG-012)
+- [x] `--dry-run` / `plan()` prints mutations without writes
+- [x] Idempotent re-run does not corrupt the project
+- [x] Pages Router projects rejected with a clear message
+- [x] `dg doctor` / verify exit 0 after successful add (covered by Operation `verifyOk`)
 
 ## Out of scope for MVP
 
-Dashboard, secrets sync, Laravel, Better Auth (Wave N1b), payments, notify.
+Dashboard polish, payments. Better Auth, notify, Laravel, and secrets pull landed as later waves.

@@ -3,20 +3,25 @@
 ## Preconditions
 
 1. `pnpm install && pnpm -r build && pnpm test && pnpm typecheck` green  
-2. npm user logged in with publish rights to `@dudgital`  
-3. Package version bumped in `cli/package.json`  
+2. `pnpm pack:check` green (no `workspace:*` in published deps; tarball includes `dist/bin.js`)  
+3. npm user logged in with publish rights to `@dudgital`  
+4. Package version bumped in `cli/package.json`  
+
+## How the CLI is packaged
+
+`@dudgital/dude` is **bundled** with `tsup`. Workspace packages (`@dudgital/operations`, catalogs, `shared`) are compiled into `dist/` so end users only install `@dudgital/dude` — they never need the monorepo.
+
+Those packages stay as `devDependencies` with `workspace:*` for local development; they are **not** published runtime dependencies.
 
 ## Commands
 
 ```bash
 cd ecosystem/dudgital
-pnpm --filter @dudgital/shared build
-pnpm --filter @dudgital/operations build
-# build remaining workspace deps then:
+pnpm pack:check
 pnpm --filter @dudgital/dude publish --access public
 ```
 
-Workspace dependencies must be published first (or bundled) before a public CLI publish. Until the npm org exists, treat publish as owner-gated — document E404/E403 in lumivel `.lumis/progress/decisions.md`.
+Until the npm org exists, treat publish as owner-gated.
 
 ## Telemetry (opt-in)
 

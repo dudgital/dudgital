@@ -8,11 +8,13 @@
     "typecheck": "pnpm -r run typecheck",
     "test": "vitest run",
     "test:matrix": "pnpm test && node scripts/fixture-matrix.mjs",
+    "pack:check": "pnpm --filter @dudgital/dude build && node scripts/check-publishable.mjs",
     "dg": "node cli/dist/bin.js",
     "dude": "node cli/dist/bin.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
